@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy>=2.0
+psycopg2-binary
+pandas
+numpy
+scikit-learn
+xgboost
+joblib
+pydantic>=2
+pydantic-settings>=2
+python-dotenv
+asyncpg

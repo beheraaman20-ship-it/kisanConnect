@@ -1,8 +1,32 @@
+# Node
+node_modules/
+node_modules/**
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
+venv/
+.venv/
+
+# ML artifacts
 *.pkl
+saved_models/
+
+# Env & secrets
 .env
-node_modules/
+.env.local
+*.env.local
+
+# Expo / React Native
+.expo/
+mobile/.expo/
+
+# OS / editor
 .DS_Store
+Thumbs.db
 *.log
+
+# Build output
+dist/
+build/

@@ -10,8 +10,10 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
 
     # Database
-    database_url: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/kisanconnect"
-    async_database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/kisanconnect"
+    # Default: read the backend's SQLite database directly (no install needed).
+    # For a PostgreSQL deployment, set DATABASE_URL to a postgresql+psycopg2:// URL.
+    database_url: str = "sqlite:///C:/KisanConnectBackend/data/kisanconnect.db"
+    async_database_url: str = "sqlite+aiosqlite:///C:/KisanConnectBackend/data/kisanconnect.db"
 
     # Model storage
     model_dir: str = "saved_models"

@@ -4,9 +4,9 @@ import { success } from '../utils/response.js';
 import { todayStr } from '../utils/date.js';
 
 export const centerController = {
-  list(req, res) {
+  async list(req, res) {
     const { district, status, lat, lng, radiusKm } = req.query;
-    const centers = centerService.listCenters({
+    const centers = await centerService.listCenters({
       district: district || null,
       status: status || null,
       lat: lat ? Number(lat) : null,
@@ -16,8 +16,8 @@ export const centerController = {
     return success(res, { centers });
   },
 
-  get(req, res) {
-    const center = centerService.getCenter(Number(req.params.id));
+  async get(req, res) {
+    const center = await centerService.getCenter(Number(req.params.id));
     if (!center) throw notFound('Center not found');
     return success(res, { center });
   },

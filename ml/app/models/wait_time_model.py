@@ -147,6 +147,10 @@ class WaitTimeModel:
             pred = float(self._baseline_predict(X)[0])
             baseline = pred
 
+        # A wait time can never be negative.
+        pred = max(0.0, pred)
+        baseline = max(0.0, baseline)
+
         # Simple heuristic confidence interval based on model MAE
         std = self.metrics.get("mae", 5.0)
         low = max(0.0, pred - 1.5 * std)

@@ -11,7 +11,7 @@ const farmerOnly = [authenticate, requireRole('farmer')];
 
 router.get('/:id', authenticate, w(bookingController.getSlot));
 router.post('/book', ...farmerOnly, validate(bookSlotSchema), w(bookingController.book));
-router.post('/bookings/:id/cancel', ...farmerOnly, w(bookingController.cancel));
-router.post('/bookings/:id/reschedule', ...farmerOnly, validate(rescheduleSchema), w(bookingController.reschedule));
+router.post('/:id/cancel', ...farmerOnly, w(bookingController.cancel));
+router.post('/:id/reschedule', ...farmerOnly, validate(rescheduleSchema), w(bookingController.reschedule));
 
 export default router;

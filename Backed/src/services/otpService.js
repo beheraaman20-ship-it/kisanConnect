@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { getDb } from '../config/db.js';
 import { env } from '../config/env.js';
 import { badRequest } from '../utils/errors.js';
+import { sendSms } from './smsService.js';
 
 function generateOtp(digits) {
   const max = 10 ** digits;
@@ -31,7 +32,22 @@ export async function sendOtp(mobile) {
   ).run(normalized, await hashOtp(code), expiresAt);
 
   const result = { success: true, message: 'OTP sent successfully' };
-  if (env.otp.devMode) result.devOtp = code;
+
+  if (env.otp.devMode) {
+    result.devOtp = code;
+  } else {
+    try {
+      const message = `Your KisanConnect OTP is: ${code}. It is valid for ${env.otp.ttlMinutes} minutes. Do not share this with anyone.`;
+      const smsResult = await sendSms(normalized, message);
+      result.smsSent = true;
+      result.messageId = smsResult.messageId;
+    } catch (smsError) {
+      console.error('Failed to send SMS:', smsError.message);
+      result.smsSent = false;
+      result.smsError = smsError.message;
+    }
+  }
+
   return result;
 }
 

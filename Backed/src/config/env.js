@@ -25,6 +25,18 @@ export const env = {
     rateLimitMax: int(process.env.OTP_RATE_LIMIT_MAX, 3),
     devMode: bool(process.env.OTP_DEV_MODE, true),
   },
+  sms: {
+    provider: process.env.SMS_PROVIDER || 'msg91',
+    apiKey: process.env.SMS_API_KEY || '',
+    senderId: process.env.SMS_SENDER_ID || 'KISAN',
+    templateId: process.env.SMS_TEMPLATE_ID || '',
+    authKey: process.env.SMS_AUTH_KEY || '',
+    username: process.env.SMS_USERNAME || '',
+    password: process.env.SMS_PASSWORD || '',
+    accountSid: process.env.SMS_ACCOUNT_SID || '',
+    authToken: process.env.SMS_AUTH_TOKEN || '',
+    from: process.env.SMS_FROM || '',
+  },
   firebase: {
     projectId: process.env.FIREBASE_PROJECT_ID || '',
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',

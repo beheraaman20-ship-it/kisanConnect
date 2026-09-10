@@ -9,11 +9,18 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
+connect_args = (
+    {}
+    if settings.database_url.startswith("sqlite")
+    else {"connect_timeout": 5}
+)
+
 engine = create_engine(
     settings.database_url,
-    pool_pre_ping=True,
+    pool_pre_ping=not settings.database_url.startswith("sqlite"),
     pool_recycle=3600,
-    connect_args={"connect_timeout": 5},
+    connect_args=connect_args,
+    future=True,
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

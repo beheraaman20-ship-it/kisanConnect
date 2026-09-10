@@ -79,7 +79,6 @@ class PredictionService:
     ) -> CenterRecommendResponse:
         """Recommend from live DB center state (used by backend)."""
         model = registry.get_recommend_model()
-        model.predict  # ensure loaded
 
         df = extract_center_data()
         if df.empty:

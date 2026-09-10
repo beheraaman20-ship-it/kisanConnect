@@ -39,8 +39,8 @@ def extract_wait_time_training_data(
             p.commodity,
             p.quantity,
             p.quality_status,
-            DATE_PART('dow', t.booked_at)::int AS day_of_week,
-            EXTRACT(HOUR FROM t.booked_at AT TIME ZONE 'Asia/Kolkata')::int AS hour,
+            CAST((CAST(strftime('%w', t.booked_at) AS INTEGER) + 6) % 7 AS INTEGER) AS day_of_week,
+            CAST(strftime('%H', t.booked_at) AS INTEGER) AS hour,
             c.daily_capacity,
             c.latitude,
             c.longitude,
@@ -169,7 +169,7 @@ def extract_center_data() -> pd.DataFrame:
                   AND t.status IN ('BOOKED','WAITING')
             ), 0) AS current_queue_length,
             COALESCE((
-                SELECT AVG(EXTRACT(EPOCH FROM (t.completed_at - t.booked_at))/60.0)
+                SELECT AVG((julianday(t.completed_at) - julianday(t.booked_at)) * 1440.0)
                 FROM tokens t
                 WHERE t.center_id = c.id AND t.completed_at IS NOT NULL
             ), 15.0) AS avg_processing_minutes

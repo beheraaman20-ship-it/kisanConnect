@@ -211,7 +211,16 @@ export const queueService = {
         data: { tokenId: token.id },
       });
     }
-    emitTokenStatus(token.farmer_id, { tokenId: token.id, status: token.status, tokenNumber: token.token_number });
+    const center = getDb().prepare('SELECT active_counters FROM procurement_centers WHERE id = ?').get(token.center_id);
+    const { position, currentToken, estimatedWaitMinutes } = queueService.getTokenLivePosition(token, center);
+    emitTokenStatus(token.farmer_id, {
+      tokenId: token.id,
+      status: token.status,
+      tokenNumber: token.token_number,
+      position,
+      currentToken,
+      estimatedWaitMinutes,
+    });
   },
 
   recomputePositions(db, centerId, date, center) {

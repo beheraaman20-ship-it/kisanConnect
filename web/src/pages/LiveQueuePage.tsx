@@ -39,7 +39,7 @@ export const LiveQueuePage: React.FC = () => {
   const { queueData, isConnected, isReconnecting } = useLiveQueue(centerId);
 
   const displayQueue = queueData ?? {
-    currentToken: null as string | null,
+    currentToken: tokenData?.data?.currentToken ?? null,
     position: tokenData?.data?.queuePosition,
     estimatedWaitMinutes: tokenData?.data?.estimatedWaitTime,
   };

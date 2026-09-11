@@ -52,9 +52,13 @@ export async function sendOtp(mobile) {
 }
 
 export function canRequestOtp(mobile, now = new Date()) {
+  const windowStart = new Date(now.getTime() - env.otp.rateLimitWindowMs)
+    .toISOString()
+    .replace('T', ' ')
+    .slice(0, 19);
   const row = getDb().prepare(
     'SELECT COUNT(*) AS c FROM otp_codes WHERE mobile = ? AND created_at > ?',
-  ).get(mobile, new Date(now.getTime() - env.otp.rateLimitWindowMs).toISOString());
+  ).get(mobile, windowStart);
   return Number(row.c) < env.otp.rateLimitMax;
 }
 

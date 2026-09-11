@@ -24,6 +24,10 @@ export const queueController = {
 };
 
 export const userController = {
+  getVapidPublicKey(_, res) {
+    return success(res, { vapidPublicKey: getVapidPublicKey() });
+  },
+
   registerDevice(req, res) {
     const db = getDb();
     db.prepare(

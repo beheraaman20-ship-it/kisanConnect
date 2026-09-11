@@ -36,15 +36,15 @@ export const useLiveQueue = (centerId: string | undefined) => {
         });
 
         socket.on('queue.updated', (data: QueueUpdate) => {
-          if (active) setQueueData(data);
+          if (active && typeof data?.currentToken !== 'object') setQueueData(data);
         });
 
         socket.on('token.called', (data: QueueUpdate) => {
-          if (active) setQueueData(data);
+          if (active && typeof data?.currentToken !== 'object') setQueueData(data);
         });
 
         socket.on('token.status_changed', (data: QueueUpdate) => {
-          if (active) setQueueData(data);
+          if (active && typeof data?.currentToken !== 'object') setQueueData(data);
         });
 
         if (!socket.connected) {

@@ -48,19 +48,26 @@ export const mapSlot = (row: any): Slot => ({
   status: (row.status ?? 'open').toUpperCase(),
 });
 
-export const mapToken = (row: any): Token => ({
-  id: String(row.id),
-  tokenNumber: row.token_number,
-  farmerId: String(row.farmer_id),
-  centerId: String(row.center_id),
-  slotId: String(row.slot_id),
-  status: row.status,
-  queuePosition: Number(row.queue_position ?? 0),
-  estimatedWaitTime: Number(row.estimated_wait_minutes ?? 0),
-  bookedAt: row.booked_at,
-  calledAt: row.called_at ?? undefined,
-  completedAt: row.completed_at ?? undefined,
-});
+export const mapToken = (row: any): Token => {
+  const live = row.live;
+  const useLive = live?.active === true;
+  return {
+    id: String(row.id),
+    tokenNumber: row.token_number,
+    farmerId: String(row.farmer_id),
+    centerId: String(row.center_id),
+    slotId: String(row.slot_id),
+    status: row.status,
+    queuePosition: useLive ? Number(live.position) : Number(row.queue_position ?? 0),
+    estimatedWaitTime: useLive
+      ? Number(live.estimatedWaitMinutes ?? 0)
+      : Number(row.estimated_wait_minutes ?? 0),
+    currentToken: useLive ? live.currentToken : undefined,
+    bookedAt: row.booked_at,
+    calledAt: row.called_at ?? undefined,
+    completedAt: row.completed_at ?? undefined,
+  };
+};
 
 export interface Booking {
   id: string;

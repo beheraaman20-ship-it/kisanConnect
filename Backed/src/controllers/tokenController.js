@@ -1,5 +1,6 @@
 import { tokenRepo } from '../repositories/tokenRepo.js';
 import { queueService } from '../services/queueService.js';
+import { getDb } from '../config/db.js';
 import { notFound, forbidden } from '../utils/errors.js';
 import { success } from '../utils/response.js';
 
@@ -20,7 +21,9 @@ export const tokenController = {
     const token = tokenRepo.findById(Number(req.params.id));
     if (!token) throw notFound('Token not found');
     ensureAccess(req.user, token);
-    return success(res, { token });
+    const center = getDb().prepare('SELECT active_counters FROM procurement_centers WHERE id = ?').get(token.center_id);
+    const live = queueService.getTokenLivePosition(token, center);
+    return success(res, { token: { ...token, live } });
   },
 
   status(req, res) {

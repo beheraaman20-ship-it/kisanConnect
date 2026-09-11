@@ -7,6 +7,7 @@ const router = Router();
 const w = wrap;
 
 router.post('/devices', authenticate, w(userController.registerDevice));
+router.get('/push/vapid-key', w(userController.getVapidPublicKey));
 router.post('/push/subscribe', authenticate, w(userController.subscribePush));
 router.post('/push/unsubscribe', authenticate, w(userController.unsubscribePush));
 router.get('/notifications', authenticate, w(userController.listNotifications));

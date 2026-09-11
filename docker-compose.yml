@@ -1,0 +1,38 @@
+services:
+  ml:
+    build: ./ml
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  backend:
+    build: ./Backed
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - DB_PATH=/app/data/kisanconnect.db
+      - JWT_SECRET=${JWT_SECRET:-dev-secret-change-me}
+      - OTP_DEV_MODE=true
+      - OTP_DIGITS=4
+      - ML_SERVICE_URL=http://ml:8001
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY:-}
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY:-}
+      - VAPID_SUBJECT=mailto:admin@kisanconnect.local
+    volumes:
+      - backend-data:/app/data
+    depends_on:
+      - ml
+    restart: unless-stopped
+
+  web:
+    build: ./web
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend-data:

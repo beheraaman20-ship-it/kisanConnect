@@ -4,13 +4,21 @@ import { authApi } from '@/lib/api/authApi';
 import type { User } from '@/lib/types';
 
 const getErrorMessage = (error: unknown): string => {
-  if (error && typeof error === 'object' && 'response' in error) {
+  if (error && typeof error === 'object') {
     const axiosError = error as {
       response?: { data?: { error?: { message?: string } } };
+      message?: string;
+      code?: string;
     };
-    return axiosError.response?.data?.error?.message ?? '';
+    if (axiosError.response) {
+      return axiosError.response.data?.error?.message ?? 'Request failed. Please try again.';
+    }
+    if (axiosError.code === 'ECONNABORTED') {
+      return 'The server took too long to respond. Please try again.';
+    }
+    return 'Cannot reach the server. Make sure the backend is running.';
   }
-  return '';
+  return 'Request failed. Please try again.';
 };
 
 interface AuthState {

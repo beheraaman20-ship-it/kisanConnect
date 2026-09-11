@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Bell, BookOpen, Home, LogOut, User } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { usePushSetup } from '@/hooks/usePushSetup';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }): string => {
   return [
@@ -16,6 +17,7 @@ const iconProps = { size: 18, 'aria-hidden': true } as const;
 
 export const AppShell: React.FC = () => {
   const { user, logout } = useAuth();
+  usePushSetup(Boolean(user));
 
   const firstName = user?.name?.split(' ')[0] || 'Farmer';
 

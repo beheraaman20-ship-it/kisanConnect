@@ -60,6 +60,7 @@ export interface Token {
   status: TokenStatus;
   queuePosition: number;
   estimatedWaitTime: number;
+  currentToken?: string;
   bookedAt: string;
   calledAt?: string;
   completedAt?: string;
